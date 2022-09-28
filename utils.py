@@ -10,8 +10,9 @@ def solution_query(cmd, value, file):
         res = list(set(file))
         return res
     elif cmd == 'sort':
-        res = sorted(file, reverse=value)
-        return res
+        if value == "desc":
+            return sorted(file, reverse=True)
+        return sorted(file)
     elif cmd == 'limit':
         value = int(value)
         res = list(file)[:value]
