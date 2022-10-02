@@ -1,6 +1,8 @@
 import os
+from typing import Union, Tuple
+
 from werkzeug.exceptions import BadRequest
-from flask import Flask, request, abort
+from flask import Flask, request, abort, Response
 from utils import solution_query
 
 app = Flask(__name__)
@@ -10,7 +12,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data/apache_logs.txt")
 
 
 @app.route("/perform_query/", methods=['GET', 'POST'])
-def perform_query():
+def perform_query() -> Union[Response, Tuple]:
     try:
         cmd_1 = request.args.get('cmd1')
         value_1 = request.args.get('value1')
@@ -26,12 +28,11 @@ def perform_query():
         return abort(400, 'Wrong filepath')
 
     with open(DATA_DIR, 'r') as file:
-        res = solution_query(cmd_1, value_1, file)
+        res = solution_query(str(cmd_1), str(value_1), file)
         if cmd_2 and value_2:
-            res = solution_query(cmd_2, value_2, res)
-        res = "\n".join(res)
+            res = solution_query(str(cmd_2), str(value_2), iter(res))
 
-    return app.response_class(res, content_type="text/plain")
+    return app.response_class("\n".join(res), content_type="text/plain")
 
 if __name__ == "__main__":
     app.run(debug=True)

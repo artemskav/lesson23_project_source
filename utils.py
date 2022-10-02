@@ -1,20 +1,20 @@
 import re
-from typing import Iterator, List, Any
+from typing import Iterator, Any, Optional, List
 
 
-def solution_query(cmd: str, value: str, file: Iterator) -> List[Any]:
+def solution_query(cmd: Optional[str], value: Any, file: Iterator) -> List[Any]:
     if cmd == 'filter':
         return list(filter(lambda x: value in x, file))
     elif cmd == 'regex':
-        regex = re.compile(r'(value)')
-        return list(filter(lambda x: regex.findall(x), file))
-    elif cmd == 'map':
-        value = int(value)
-        return list(map(lambda x: x.split(" ")[value], file))
+        #       images\/(\w+|(\w+-\w+)|.{1,})\.png
+        regex = re.compile(value)
+        return list(filter(lambda x: regex.search(x), file))
+    elif cmd == "map":
+        return list(map(lambda x: x.split(" ")[:int(value)], file))
     elif cmd == 'unique':
         return list(set(file))
     elif cmd == 'sort':
-        return sorted(file, reverse=(value == "desc"))
-    elif cmd == 'limit':
-        value = int(value)
-        return list(file)[:value]
+        flag = value == "desc"
+        return list(sorted(file, reverse=flag))
+    elif cmd == "limit":
+        return list(file)[:int(value)]
