@@ -1,6 +1,8 @@
 import re
 from typing import Iterator, Any, Optional, List
 
+from exception import SomeError
+
 
 def solution_query(cmd: Optional[str], value: Any, file: Iterator) -> List[Any]:
     if cmd == 'filter':
@@ -18,3 +20,5 @@ def solution_query(cmd: Optional[str], value: Any, file: Iterator) -> List[Any]:
         return list(sorted(file, reverse=flag))
     elif cmd == "limit":
         return list(file)[:int(value)]
+    else:
+        raise SomeError
