@@ -4,7 +4,7 @@ from typing import Iterator, Any, Optional, List
 from exception import SomeError
 
 
-def solution_query(cmd: Optional[str], value: Any, file: Iterator) -> List[Any]:
+def solution_query(cmd: Optional[str], value: Any, file: Iterator) -> List[str]:
     if cmd == 'filter':
         return list(filter(lambda x: value in x, file))
     elif cmd == 'regex':
